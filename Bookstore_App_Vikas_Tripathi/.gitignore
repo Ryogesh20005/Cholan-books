@@ -1,0 +1,16 @@
+# Java Compiled class files
+*.class
+
+# Serialized Binary DB Files
+*.ser
+
+# IDE / Editor folders
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+
+# Build output directories
+out/
+bin/
