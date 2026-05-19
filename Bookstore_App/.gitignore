@@ -1,8 +1,8 @@
 # Java Compiled class files
 *.class
 
-# Serialized Binary DB Files
-*.ser
+# Serialized Binary DB Files (ignore transactions, track book catalog)
+ORD-*.ser
 
 # IDE / Editor folders
 .idea/
