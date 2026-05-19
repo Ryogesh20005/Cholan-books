@@ -5,6 +5,9 @@ WORKDIR /app
 # Copy the Java source files
 COPY src ./src
 
+# Copy the pre-existing serialized database books (.ser files)
+COPY *.ser ./
+
 # Compile the codebase using the sourcepath compiler flags
 RUN mkdir -p out/production/Bookstore_App
 RUN javac -encoding utf-8 -d out/production/Bookstore_App -sourcepath src src/com/mycompany/bookstore/testing/BookClientWebServer.java
