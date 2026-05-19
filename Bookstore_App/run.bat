@@ -6,7 +6,7 @@ echo           📚  BOOKSTORE CORE JAVA LAUNCHER  📚
 echo ==========================================================
 echo.
 echo Compiling source files...
-javac -encoding utf-8 -d out/production/Bookstore_App src/com/mycompany/bookstore/testing/BookClientWebServer.java src/com/mycompany/bookstore/testing/BookClientInteractive.java src/com/mycompany/bookstore/testing/BookClient.java src/com/mycompany/bookstore/controller/BookController.java src/com/mycompany/bookstore/dto/BookDTO.java src/com/mycompany/bookstore/service/BookService.java src/com/mycompany/bookstore/service/impl/BookServiceImpl.java src/com/mycompany/bookstore/entity/BookEntity.java src/com/mycompany/bookstore/repository/BookRepository.java src/com/mycompany/bookstore/repository/impl/BookRepositoryImpl.java src/com/mycompany/bookstore/converter/BookConverter.java src/com/mycompany/bookstore/serdeser/BookSerializer.java
+javac -encoding utf-8 -d out/production/Bookstore_App -sourcepath src src/com/mycompany/bookstore/testing/BookClientWebServer.java src/com/mycompany/bookstore/testing/BookClientInteractive.java src/com/mycompany/bookstore/testing/BookClient.java
 
 if %errorlevel% neq 0 (
     echo.
