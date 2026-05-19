@@ -410,7 +410,6 @@
         </div>
 
         <div style="display: flex; gap: 10px;">
-            <button class="admin-nav-btn" onclick="openSettingsClick()">⚙️ Connection</button>
             <button class="admin-nav-btn" onclick="openAdminClick()">🔐 Admin Portal</button>
         </div>
     </header>
@@ -644,25 +643,7 @@
         </div>
     </div>
 
-    <!-- API Connection Settings Modal -->
-    <div id="settings-modal" class="modal-overlay">
-        <div class="card" style="width: 100%; max-width: 450px; padding: 30px; border-color: var(--primary);">
-            <div class="card-title" style="color: var(--primary); margin-bottom: 10px; font-size:1.4rem; font-weight:600;">
-                <span>⚙️ API Connection Settings</span>
-            </div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.4;">
-                Specify the URL of your hosted Bookstore Core Java backend API (e.g. on Render, Railway, or local).
-            </p>
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label style="display:block; margin-bottom: 6px; font-size: 0.9rem; color:var(--text-muted);">Backend API Base URL</label>
-                <input type="text" id="backendUrlInput" class="form-control" placeholder="http://localhost:8080">
-            </div>
-            <div style="display: flex; gap: 15px; margin-top: 25px;">
-                <button type="button" onclick="closeSettings()" class="btn" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; box-shadow: none;">Cancel</button>
-                <button type="button" onclick="saveSettings()" class="btn">Save & Refresh</button>
-            </div>
-        </div>
-    </div>
+
 
     <div id="toast" class="toast">Book saved successfully!</div>
 
@@ -685,34 +666,22 @@
             let savedUrl = localStorage.getItem('backendApiUrl');
             if (savedUrl) return savedUrl;
             
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            // Automatically detect the backend host if page is loaded over the network (HTTP/HTTPS)
+            if (window.location.protocol.startsWith('http')) {
+                // If already running on the same port (8080), relative paths work perfectly
                 if (window.location.port === '8080') {
                     return '';
                 }
-                return 'http://localhost:8080';
+                // If running on a different port (e.g. Live Server on port 5500), assume the Java backend
+                // is running on the same computer hostname but on port 8080
+                return window.location.protocol + '//' + window.location.hostname + ':8080';
             }
+            
+            // Default fallback for file:// or other protocols
             return 'http://localhost:8080';
         }
 
-        function openSettingsClick() {
-            document.getElementById('backendUrlInput').value = localStorage.getItem('backendApiUrl') || getBackendUrl() || 'http://localhost:8080';
-            document.getElementById('settings-modal').style.display = 'flex';
-        }
 
-        function closeSettings() {
-            document.getElementById('settings-modal').style.display = 'none';
-        }
-
-        function saveSettings() {
-            let val = document.getElementById('backendUrlInput').value.trim();
-            if (val && val.endsWith('/')) {
-                val = val.substring(0, val.length - 1);
-            }
-            localStorage.setItem('backendApiUrl', val);
-            closeSettings();
-            showToast('API connection configuration updated!', 'success');
-            loadBooks();
-        }
 
         function filterStorefront() {
             const query = document.getElementById('storeSearch').value.toLowerCase();
@@ -1003,7 +972,7 @@
                 })
                 .catch(err => {
                     console.error('Error fetching catalog:', err);
-                    grid.innerHTML = '<div class="empty-state" style="color: var(--danger); border-color: var(--danger);">Failed to load books. Please verify the API connection settings by clicking "⚙️ Connection" in the header.</div>';
+                    grid.innerHTML = '<div class="empty-state" style="color: var(--danger); border-color: var(--danger);">Failed to load books. Please ensure the Bookstore Backend Server is running and accessible on port 8080.</div>';
                 });
         }
 
