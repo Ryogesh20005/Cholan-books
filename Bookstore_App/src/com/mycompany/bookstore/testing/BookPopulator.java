@@ -8,7 +8,7 @@ public class BookPopulator {
     public static void main(String[] args) {
         BookController controller = new BookController();
         System.out.println("==========================================================");
-        System.out.println("🚀 POPULATING 100 REALISTIC BOOKS TO THE BOOKSTORE CATALOG");
+        System.out.println("🚀 POPULATING 20 REALISTIC BOOKS TO THE BOOKSTORE CATALOG");
         System.out.println("==========================================================");
         
         String[] adjectives = {"Effective", "Mastering", "Beginning", "Advanced", "Clean", "Practical", "Modern", "Complete", "Understanding", "Deep Dive Into"};
@@ -18,7 +18,7 @@ public class BookPopulator {
         String[] authors = {"Joshua Bloch", "Martin Fowler", "Robert C. Martin", "Donald Knuth", "Linus Torvalds", "Grace Hopper", "Alan Turing", "Ada Lovelace", "Dennis Ritchie", "Bjarne Stroustrup"};
         
         int count = 0;
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= 20; i++) {
             Long id = 1000L + i; // Generates IDs from 1001 to 1100
             
             // Build pseudo-random combinations for realistic book titles
@@ -46,7 +46,7 @@ public class BookPopulator {
             if (savedId != null) {
                 count++;
                 if (count % 10 == 0) {
-                    System.out.println("Serialized " + count + "/100 books... (Saved: " + savedId + ".ser)");
+                    System.out.println("Serialized " + count + "/20 books... (Saved: " + savedId + ".ser)");
                 }
             }
         }
