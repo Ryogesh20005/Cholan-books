@@ -76,6 +76,7 @@ public class BookClientWebServer {
     static class AddBookHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            if (handlePreflight(exchange)) return;
             if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
                 sendResponse(exchange, 405, "Method Not Allowed");
                 return;
@@ -129,6 +130,7 @@ public class BookClientWebServer {
     static class GetBookHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            if (handlePreflight(exchange)) return;
             if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
                 sendResponse(exchange, 405, "Method Not Allowed");
                 return;
@@ -176,6 +178,7 @@ public class BookClientWebServer {
     static class ListBooksHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            if (handlePreflight(exchange)) return;
             if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
                 sendResponse(exchange, 405, "Method Not Allowed");
                 return;
@@ -221,6 +224,7 @@ public class BookClientWebServer {
     static class BuyBookHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            if (handlePreflight(exchange)) return;
             if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
                 sendResponse(exchange, 405, "Method Not Allowed");
                 return;
@@ -303,6 +307,7 @@ public class BookClientWebServer {
     static class AdminLoginHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            if (handlePreflight(exchange)) return;
             if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
                 sendResponse(exchange, 405, "Method Not Allowed");
                 return;
@@ -335,6 +340,7 @@ public class BookClientWebServer {
     static class AdminOrdersHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            if (handlePreflight(exchange)) return;
             if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
                 sendResponse(exchange, 405, "Method Not Allowed");
                 return;
@@ -386,8 +392,22 @@ public class BookClientWebServer {
     }
 
     // Helper Utilities
+    private static boolean handlePreflight(HttpExchange exchange) throws IOException {
+        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+            exchange.sendResponseHeaders(204, -1);
+            return true;
+        }
+        return false;
+    }
+
     private static void sendResponse(HttpExchange exchange, int code, String text) throws IOException {
         byte[] responseBytes = text.getBytes(StandardCharsets.UTF_8);
+        exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
         exchange.sendResponseHeaders(code, responseBytes.length);
         OutputStream os = exchange.getResponseBody();
         os.write(responseBytes);
@@ -397,6 +417,9 @@ public class BookClientWebServer {
     private static void sendJsonResponse(HttpExchange exchange, int code, String json) throws IOException {
         byte[] responseBytes = json.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().set("Content-Type", "application/json; charset=utf-8");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
         exchange.sendResponseHeaders(code, responseBytes.length);
         OutputStream os = exchange.getResponseBody();
         os.write(responseBytes);
